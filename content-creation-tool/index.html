@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="./scripts/jquey.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+    <script src="https://cdn.rawgit.com/bgrins/spectrum/master/spectrum.js"></script>
+    <link href="https://cdn.rawgit.com/bgrins/spectrum/master/spectrum.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles.css">
+    <title>fabric.js</title>
+</head>
+<style>
+    @font-face {
+        font-family: 'test';
+        src: url('./digital-7.ttf');
+    }
+</style>
+
+<body class="p-3">
+    <div class="center_row user_details" style=" padding-right:20px ">
+        <button class="btn btn-primary mb-2" id="logout">LOGOUT</button>
+
+        <h3 class="ml-5">Logged in as: <span id="loggedIn_name"></span>
+        </h3>
+    </div>
+    <div>
+        <div class="dropdown" style="display: inline;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Assets
+            </button>
+            <div class="dropdown-menu load_assets_dropDown" id="assets_dropdown_all"
+                aria-labelledby="dropdownMenuButton">
+
+            </div>
+        </div>
+        <div class="dropdown" style="display: inline;">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Assets created by you
+            </button>
+            <div class="dropdown-menu load_assets_dropDown" id="assets_dropdown_user"
+                aria-labelledby="dropdownMenuButton">
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="asset_information mt-3">
+
+    </div>
+
+
+
+    <div class="container  center_column  mt-2 ">
+        <h5>500 X 500 Canvas</h5>
+        <canvas id="rect" width="500" height="500"></canvas>
+    </div>
+
+    <!-- global -->
+    <div class="global_panel p-5 mt-3">
+        <label for="file" class="btn btn-primary mb-0" style="cursor: pointer;">Upload SVG</label>
+        <button class="btn btn-primary " onclick="add_ruler()">add ruler</button>
+        <button class="btn btn-primary " onclick="add_Protractor()">add Protractor</button>
+        <div>
+            <button class="btn btn-primary add-grid">Toggle grid</button>
+        </div>
+        <span class="p-2">Add color</span>
+        <input type='text' id="custom" />
+        <input type="file" accept="image/svg" name="image" id="file" onchange="loadFile(event)" style="display: none;">
+        <label for="guid_x">Guid-X</label>
+        <input type='checkbox' id="guid_x" />
+        <label for="guid_Yy">Guid-Y</label>
+        <input type='checkbox' id="guid_y" />
+
+    </div>
+    <!-- panel -1  -->
+    <div class="panel-2 p-5 center_column">
+        <h3>Options</h3>
+        <div class="center_row">
+            <button class="btn btn-danger delete">Delete</button>
+            <button class="btn btn-danger clear">clear</button>
+            <button class="btn btn-primary move_object">move</button>
+            <button class="btn btn-primary fill-color">fill color</button>
+            <button class="btn btn-primary remove-border">remove-border</button>
+            <button class="btn btn-primary group">group</button>
+            <button class="btn btn-primary un-group">un-group</button>
+            <button class="btn btn-primary svg">svg</button>
+            <button class="btn btn-primary json">json</button>
+        </div>
+    </div>
+
+    <!--  panel -2 -->
+    <div class="buttons pt-2  bg-secondary content_panel">
+        <div class="one_col w-100 p-2 m-3 " style="background-color: #3bdd56;">
+            <h3>Add Shapes</h3>
+            <button class="btn btn-primary add-triangle">Triangle</button>
+            <button class="btn btn-primary add-rectangle">Rectangle</button>
+            <button class="btn btn-primary add-circle">Circle</button>
+            <button class="btn btn-primary add-semicircle">Semicircle</button>
+            <button class="btn btn-primary add-polygon">Polygon</button>
+            <button class="btn btn-primary add-line">Line</button>
+            <button class="btn btn-primary addpoint">Point</button>
+            <div class="container w-50">
+                <form class="addtext-form my-2 mx- form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control ml-5" name="addtext" id="exampleInputEmail1"
+                            aria-describedby="emailHelp" placeholder="addtext">
+                    </div>
+                    <button type="submit" class="btn btn-primary  ml-5">add text</button>
+                </form>
+            </div>
+
+
+        </div>
+
+
+        <div class=" w-100  grid_with_img_container center_column p-2 m-3">
+            <h3>Draw grid with images(2 X 6)</h3>
+            <div class="center_row m-2">
+                <div class="p-2">
+                    <label>top Row</label>
+                    <input type="number" min="0" max="6" id="top_row_count">
+                </div>
+                <div class="p-2">
+                    <label>bottom Row</label>
+                    <input type="number" min="0" max="6" id="bottom_row_count">
+                </div>
+                <img src="./assets/hen-svgrepo-com.svg" onclick="add_grid_img(this)" id="hen_img">
+                <img src="./assets/cake-svgrepo-com.svg" onclick="add_grid_img(this)" id="cake_img">
+                <!-- <button class="btn btn-primary group_items ">group</button> -->
+            </div>
+
+        </div>
+
+        <div class=" w-100 grid_select center_column p-2 m-3">
+            <form class=" my-2  custom_grid m-3">
+                <h2>custom grid</h2>
+                <div class=" form-group w-100">
+                    <input type="number" class="form-control   " name="rows" placeholder="rows">
+                    <input type="number" class="form-control  " name="columns" placeholder="columns">
+                    <input type="text" class="form-control  " name="array_images"
+                        placeholder="number of images in each columns">
+                </div>
+                <button type="submit" class="btn btn-primary ">add custom Grid</button>
+            </form>
+        </div>
+
+        <div class=" w-100 second_row center_column p-3 m-3" style="background-color: #8296b9;">
+            <h2>Triangles</h2>
+            <div class="center_row">
+                <div>
+                    <form class=" my-2  draw_triangle_with_degrees ">
+                        <p>add triangle with angle</p>
+
+                        <div class=" form-group ">
+                            <input type="number" class="form-control w-75 ml-4 " name="addtext" id="angle"
+                                placeholder="default angle = 60">
+                        </div>
+                        <button type="submit" class="btn btn-primary ">draw Triangle</button>
+                    </form>
+                </div>
+                <div>
+                    <form class=" my-2  draw_isosceles_triangle ">
+                        <p>add isosceles_triangle</p>
+
+                        <div class=" form-group ">
+                            <input type="number" class="form-control w-75 ml-4 " id="iso-angle"
+                                placeholder="default angle = 60">
+                        </div>
+                        <button type="submit" class="btn btn-primary ">draw Triangle</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class=" w-100 circle_with_sectors p-2 m-3">
+            <h2>add circle with sectors</h2>
+            <form class="p-3">
+                <label>angle</label>
+                <input type="number" id="sector_angle" required>
+                <label>count</label>
+                <input type="number" id="sector_count" required>
+                <label>fill_count</label>
+                <input type="number" id="sector_fill_count">
+                <label>fill color</label>
+                <input type="checkbox" id="circle_sector_fill">
+
+            </form>
+            <button type="button" class="btn btn-primary " id="add_circle_with_sectors">add circle</button>
+
+        </div>
+
+        <div class="polygone w-100 center_column p-2 m-3">
+            <h3>Polygons</h3>
+            <div class="center_row">
+                <button class="btn btn-primary pentagon" onclick="pentagon()">Pentagon</button>
+                <button class="btn btn-primary hexagon" onclick="hexagon()">Hexagon</button>
+                <button class="btn btn-primary heptagon" onclick="heptagon()">Heptagon</button>
+                <button class="btn btn-primary octagon" onclick="octagon()">Octagon</button>
+                <button class="btn btn-primary octagon" onclick="exp_pentagon()">EXP_PENTAGON</button>
+            </div>
+        </div>
+
+        <div class="3dshapes w-100 m-3 p-2 " style="background-color: rgb(163, 71, 71);">
+            <h3>3D Shapes</h3>
+            <button class="btn btn-primary" onclick="cuboid()">cuboid</button>
+            <button class="btn btn-primary" onclick="cylinder()">cylinder</button>
+            <button class="btn btn-primary" onclick="cone()">cone</button>
+            <button class="btn btn-primary" onclick="prism()">prism</button>
+
+        </div>
+
+        <div class="custom_polygon w-100 center_column p-2 m-3" style="background-color: yellow;">
+            <div>
+                <form class=" my-2 " id="custom_polygon">
+                    <h2>custom polygon</h2>
+                    <P>EXAMPLE: 100,100 150,100 150,150 200,150 200,200 300,200 300,250 100,250</P>
+                    <div class=" form-group ">
+                        <input type="text" class="form-control w-100  " name="custom_polygon_input">
+                    </div>
+                    <button type="submit" class="btn btn-primary ">draw</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="custom_clock w-100 center_column p-2 m-3" style="background-color:#4E8CF5;">
+            <div>
+                <form class=" my-2 " id="custom_clock">
+                    <h3>Custom Clock</h3>
+                    <h4>Analog Clock</h4>
+
+                    <P>EXAMPLE: hours minutes seconds/min: 12:30:10 </P>
+                    <p>Please select your clock face:</p>
+                    <label for="clock_1"><img src="./assets/clock_1.svg" alt=""></label>
+                    <input type="radio" id="clock_1" name="gender" value="./assets/clock_1.svg">
+
+                    <label for="clock_2"><img src="./assets/clock_2.svg" alt=""></label>
+                    <input type="radio" id="clock_2" name="gender" value="./assets/clock_2.svg">
+
+                    <label for="clock_3"><img src="./assets/clock_3.svg" alt=""></label>
+                    <input type="radio" id="clock_3" name="gender" value="./assets/clock_3.svg">
+
+
+
+                    <div class=" form-group pt-3">
+
+                        <input type="text" class="form-control " name="custom_clock_input">
+                        seconds hand <input type="checkbox" id="clock_seconds_hand" checked>
+
+                    </div>
+                    <button type="submit" class="btn btn-primary ">Add Clock</button>
+                    <h4 class="mt-5">Digital Clock (EXP)</h4>
+                    <p>Example 12:45</p>
+                    <input type="text" class="form-control  " id="digital_clock_time">
+                    <button type="button" class="btn btn-primary " id="digital_time_btn">Add
+                        Digital
+                        Clock</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+    <div class="row saving_section">
+        <div class="download-section   m-5 col center_column">
+            <h2>Download</h2>
+            <label class="mt-4" for="filename">File name</label>
+            <input type='text' id="filename" />
+
+            <a id="download_svg" download="svg_format.svg" href=”” class="btn btn-secondary m-3 svg">Download as svg
+            </a>
+        </div>
+
+        <div class="col save_svg_container mt-5 center_column  ">
+            <h2>Save</h2>
+            <form class=" my-2 save_svg ">
+                <div class=" form-group ">
+                    <label for="svg_name">SVG Name</label>
+                    <input type="text" class="form-control" name="svg_name" placeholder="name">
+                    <label>Category</label>
+                    <input type="text" class="form-control " name="category" placeholder="category">
+                    <label>Tags</label>
+                    <input type="text" class="form-control " name="tags" placeholder="add space between tags ">
+                    <button type="submit" class="btn btn-primary  ">Save Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"
+        integrity="sha512-u/yLQ5Cr3lmywJXLvtkKXONhFOU2GA5dvhIw4yxI9oMcs36TpQfu3yW3fOFEsFlxTQ4BgM0Cc/dWzAUMdFopjA=="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"
+        integrity="sha512-VGxuOMLdTe8EmBucQ5vYNoYDTGijqUsStF6eM7P3vA/cM1pqOwSBv/uxw94PhhJJn795NlOeKBkECQZ1gIzp6A=="
+        crossorigin="anonymous"></script>
+    <script src="./scripts/fabric.js" defer></script>
+    <script src="./scripts/network.js"></script>
+    <script src="./scripts/main.js" defer></script>
+    <script src="./scripts/polygon.js" defer></script>
+
+</body>
+
+</html>
